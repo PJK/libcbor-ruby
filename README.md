@@ -5,6 +5,8 @@ The Ruby bindings for [libcbor](https://github.com/PJK/libcbor)
 
 ## Installation
 
+Make sure that `libffi-dev` is present on your system.
+
 Add this line to your application's Gemfile:
 
 ```ruby
