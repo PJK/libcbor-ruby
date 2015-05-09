@@ -14,6 +14,7 @@ require 'libcbor/helpers'
 require 'libcbor/cbor_item'
 require 'libcbor/streaming/callback_simplifier'
 require 'libcbor/streaming/buffered_decoder'
+require 'libcbor/streaming/encoder'
 
 module CBOR
 	class DecodingError < StandardError; end

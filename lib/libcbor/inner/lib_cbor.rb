@@ -129,5 +129,7 @@ module CBOR
 
 		# buffer, buffer size, callbacks, context
 		attach_function :cbor_stream_decode, [:pointer, :size_t, :pointer, :pointer], CborDecoderResult.by_value
+
+		attach_function :cbor_encode_tag, [:uint64, :memblock, :size_t], :size_t
 	end
 end
