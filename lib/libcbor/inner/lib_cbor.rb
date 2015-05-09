@@ -72,5 +72,25 @@ module CBOR
 		attach_function :cbor_float_ctrl_is_ctrl, [:cbor_item_t_ref], :bool
 		attach_function :cbor_ctrl_value, [:cbor_item_t_ref], :uint8
 		attach_function :cbor_float_get_float, [:cbor_item_t_ref], :double
+
+		callback :cbor_int8_callback, [:pointer, :uint8], :void
+
+		# typedef void(*cbor_int16_callback)(void *, uint16_t);
+		#
+		# typedef void(*cbor_int32_callback)(void *, uint32_t);
+		#
+		# typedef void(*cbor_int64_callback)(void *, uint64_t);
+		#
+		# typedef void(*cbor_simple_callback)(void *);
+		#
+		# typedef void(*cbor_string_callback)(void *, cbor_data, size_t);
+		#
+		# typedef void(*cbor_collection_callback)(void *, size_t);
+		#
+		# typedef void(*cbor_float_callback)(void *, float);
+		#
+		# typedef void(*cbor_double_callback)(void *, double);
+		#
+		# typedef void(*cbor_bool_callback)(void *, bool);
 	end
 end
