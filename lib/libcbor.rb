@@ -2,8 +2,6 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'rubygems'
 require 'ffi'
-require 'pry'
-
 
 require 'libcbor/version'
 require 'libcbor/inner/lib_cbor'
