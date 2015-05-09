@@ -55,5 +55,29 @@ module CBOR
 				expect(subject.value).to eq "\x42"
 			end
 		end
+
+		context 'for "true" simple value' do
+			subject { CBOR.load_native("\xF5") }
+
+			it 'returns float_ctrl type' do
+				expect(subject.type).to eq :float_ctrl
+			end
+
+			it 'returns value "true"' do
+				expect(subject.value).to eq true
+			end
+		end
+
+		context 'for 3.14 float' do
+			subject { CBOR.load_native([250, 64, 72, 245, 195].pack('c*')) }
+
+			it 'returns float_ctrl type' do
+				expect(subject.type).to eq :float_ctrl
+			end
+
+			it 'returns value 3.14' do
+				expect(subject.value).to be_within(0.0001).of(3.14)
+			end
+		end
 	end
 end

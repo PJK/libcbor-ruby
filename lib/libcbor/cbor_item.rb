@@ -19,6 +19,21 @@ module CBOR
 					LibCBOR
 						.cbor_bytestring_handle(handle)
 						.get_string(0, LibCBOR.cbor_bytestring_length(handle))
+				when :float_ctrl
+					if LibCBOR.cbor_float_ctrl_is_ctrl(handle)
+						case ctr_val = LibCBOR.cbor_ctrl_value(handle)
+							when 20
+								false
+							when 21
+								true
+							when 22
+								nil
+							else
+								ctr_val
+						end
+					else
+						LibCBOR.cbor_float_get_float(handle)
+					end
 				else
 					raise 'Unknown type - the FFI enum mapping is probably broken. Please report this bug.'
 			end
