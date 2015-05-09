@@ -15,6 +15,10 @@ module CBOR
 					LibCBOR
 						.cbor_string_handle(handle)
 						.get_string(0, LibCBOR.cbor_string_length(handle))
+				when :bytestring
+					LibCBOR
+						.cbor_bytestring_handle(handle)
+						.get_string(0, LibCBOR.cbor_bytestring_length(handle))
 				else
 					raise 'Unknown type - the FFI enum mapping is probably broken. Please report this bug.'
 			end

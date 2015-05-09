@@ -14,7 +14,7 @@ require 'libcbor/helpers'
 require 'libcbor/cbor_item'
 
 module CBOR
-	class UndefinedConversion < StandardError; end
+	class DecodingError < StandardError; end
 
 	def self.encode(obj)
 		obj.to_cbor
@@ -34,7 +34,8 @@ module CBOR
 	def self.load_native(data)
 		res = FFI::MemoryPointer.new LibCBOR::CborLoadResult
 		CBORItem.new(
-			LibCBOR.cbor_load(FFI::MemoryPointer.from_string(data), data.bytes.count, res)
+			LibCBOR.cbor_load(FFI::MemoryPointer.from_string(data), data.bytes.count, res).
+				tap { |ptr| raise DecodingError if ptr.null? }
 		)
 	end
 
