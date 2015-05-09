@@ -20,11 +20,21 @@ module CBOR
 					break: Proc.new {},
 				}.merge(callbacks)
 				@buffer = ''
+				@proxy = CallbackSimplifier.new(self)
 			end
 
 			def <<(data)
 				@buffer += data
-				# emit events
+				loop do
+					read = LibCBOR.cbor_stream_decode(
+						FFI::MemoryPointer.from_string(@buffer),
+						@buffer.bytes.length,
+						@proxy.callback_set.to_ptr,
+						nil
+					)
+					break if read == 0
+					@buffer = @buffer[read .. -1]
+				end
 			end
 
 			def callback(name, *args)
