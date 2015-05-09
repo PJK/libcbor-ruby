@@ -11,6 +11,6 @@ before_install:
   - unzip master.zip
   - cd libcbor-master
   - cmake .
-  - make libcbor
+  - make cbor cbor_shared
   - sudo make install
   - cd ..
