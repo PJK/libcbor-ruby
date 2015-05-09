@@ -83,5 +83,51 @@ module CBOR
 		callback :cbor_float_callback, [:pointer, :float], :void
 		callback :cbor_double_callback, [:pointer, :double], :void
 		callback :cbor_bool_callback, [:pointer, :bool], :void
+
+		class CborCallbacks < FFI::Struct
+			layout :uint8, :cbor_int8_callback,
+				:uint16, :cbor_int16_callback,
+				:uint32, :cbor_int32_callback,
+				:uint64, :cbor_int64_callback,
+
+				:negint8, :cbor_int8_callback,
+				:negint16, :cbor_int16_callback,
+				:negint32, :cbor_int32_callback,
+				:negint64, :cbor_int64_callback,
+
+				:byte_string, :cbor_string_callback,
+				:byte_string_start, :cbor_simple_callback,
+
+				:string, :cbor_string_callback,
+				:string_start, :cbor_simple_callback,
+
+				:array_start, :cbor_collection_callback,
+				:indef_array_start, :cbor_simple_callback,
+
+				:map_start, :cbor_collection_callback,
+				:indef_map_start, :cbor_simple_callback,
+
+				:tag, :cbor_int64_callback,
+
+				:float2, :cbor_float_callback,
+				:float4, :cbor_float_callback,
+				:float8, :cbor_double_callback,
+
+				:undefined, :cbor_simple_callback,
+				:null, :cbor_simple_callback,
+				:boolean, :cbor_bool_callback,
+
+				:indef_break, :cbor_simple_callback
+		end
+
+		DecoderStatus = enum(:finished, :not_enough_data, :buffer_error, :error)
+
+		class CborDecoderResult < FFI::Struct
+			layout :read, :size_t,
+				:status, DecoderStatus
+		end
+
+		# buffer, buffer size, callbacks, context
+		attach_function :cbor_stream_decode, [:pointer, :size_t, :pointer, :pointer], CborDecoderResult
 	end
 end
