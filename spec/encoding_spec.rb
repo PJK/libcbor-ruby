@@ -57,7 +57,7 @@ module CBOR
 				end
 			end
 
-			describe nil do
+			describe 'nil' do
 				it 'returns correct bytes' do
 					expect(nil.__to_cbor.bytes).to eq [0xF6]
 				end
