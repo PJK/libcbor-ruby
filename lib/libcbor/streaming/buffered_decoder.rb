@@ -31,7 +31,7 @@ module CBOR
 						@buffer.bytes.length,
 						@proxy.callback_set.to_ptr,
 						nil
-					)
+					)[:read]
 					break if read == 0
 					@buffer = @buffer[read .. -1]
 				end
