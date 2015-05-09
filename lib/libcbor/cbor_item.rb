@@ -25,7 +25,11 @@ module CBOR
 						.read_array_of_type(LibCBOR::CborItemTRef, :read_pointer, LibCBOR.cbor_array_size(handle))
 						.map { |item| CBORItem.new(item).value }
 				when :map
-
+					pairs_handle = LibCBOR.cbor_map_handle(handle)
+					Hash[LibCBOR.cbor_map_size(handle).times.map { |idx|
+						pair = LibCBOR::CborPair.new(pairs_handle + LibCBOR::CborPair.size * idx)
+						[pair[:key], pair[:value]].map { |ptr| CBORItem.new(ptr).value}
+					}]
 				when :float_ctrl
 					if LibCBOR.cbor_float_ctrl_is_ctrl(handle)
 						case ctr_val = LibCBOR.cbor_ctrl_value(handle)
