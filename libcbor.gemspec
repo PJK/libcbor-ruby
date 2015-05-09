@@ -6,7 +6,7 @@ require 'libcbor/version'
 Gem::Specification.new do |spec|
   spec.name          = "libcbor"
   spec.version       = CBOR::VERSION
-  spec.authors       = ["PJK"]
+  spec.authors       = ["Pavel Kalvoda"]
   spec.email         = ["me@pavelkalvoda.com"]
 
   spec.summary       = %q{A Ruby binding for libcbor}
