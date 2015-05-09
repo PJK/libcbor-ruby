@@ -68,7 +68,7 @@ module CBOR
 			end
 		end
 
-		context 'for array {1: 2, 3:4}' do
+		context 'for map {1: 2, 3:4}' do
 			subject { CBOR.load_native("\xA2\x1\x2\x3\x4") }
 
 			it 'returns map type' do
@@ -77,6 +77,18 @@ module CBOR
 
 			it 'returns value [1, 2]' do
 				expect(subject.value).to eq({ 1 => 2, 3 => 4})
+			end
+		end
+
+		context 'for tag 42(0)' do
+			subject { CBOR.load_native("\xD8\x2a\x0") }
+
+			it 'returns tag type' do
+				expect(subject.type).to eq :tag
+			end
+
+			it 'returns correct Tag object' do
+				expect(subject.value).to eq Tag.new(42, 0)
 			end
 		end
 

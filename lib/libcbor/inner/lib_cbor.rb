@@ -66,6 +66,9 @@ module CBOR
 		attach_function :cbor_map_size, [:cbor_item_t_ref], :size_t
 		attach_function :cbor_map_handle, [:cbor_item_t_ref], :cbor_pair_array
 
+		attach_function :cbor_tag_value, [:cbor_item_t_ref], :uint64
+		attach_function :cbor_tag_item, [:cbor_item_t_ref], :cbor_item_t_ref
+
 		attach_function :cbor_float_ctrl_is_ctrl, [:cbor_item_t_ref], :bool
 		attach_function :cbor_ctrl_value, [:cbor_item_t_ref], :uint8
 		attach_function :cbor_float_get_float, [:cbor_item_t_ref], :double
