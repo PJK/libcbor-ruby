@@ -2,6 +2,25 @@ module CBOR
 	module LibCBOR
 		extend FFI::Library
 		ffi_lib 'cbor'
+
+		typedef :pointer, :cbor_item_t_ref
+		typedef :pointer, :buffer
+		typedef :pointer, :memblock # unsigned char * - string & bytestring handles, raw blocks
+
+		ErrorCode = enum(:none, :notenoughdata, :nodata, :malformated, :memerror, :syntaxerror)
+
+		class CborError < FFI::Struct
+			layout :position, :size_t,
+				:code, ErrorCode
+		end
+
+		class CborLoadResult < FFI::Struct
+			layout :error, CborError,
+				:read, :size_t
+		end
+
+		typedef :pointer, :cbor_load_result_ref
+
 		attach_function :cbor_decref, [:pointer], :void
 		attach_function :cbor_serialize, [:pointer, :pointer, :size_t], :size_t
 		attach_function :cbor_encode_uint, [:uint64, :pointer, :size_t], :size_t
@@ -19,5 +38,18 @@ module CBOR
 		attach_function :cbor_new_definite_string, [], :pointer
 		# void cbor_string_set_handle(cbor_item_t *item, unsigned char *data, size_t length);
 		attach_function :cbor_string_set_handle, [:pointer, :pointer, :size_t], :void
+
+		Type = enum(:uint, :negint, :bytestring, :string, :array, :map, :tag, :float_ctrl)
+
+		attach_function :cbor_typeof, [:cbor_item_t_ref], Type
+		attach_function :cbor_load, [:buffer, :size_t, :cbor_load_result_ref], :cbor_item_t_ref
+
+		attach_function :cbor_get_int, [:cbor_item_t_ref], :uint64
+
+		attach_function :cbor_string_length, [:cbor_item_t_ref], :size_t
+		attach_function :cbor_string_handle, [:cbor_item_t_ref], :memblock
+
+		attach_function :cbor_bytestring_length, [:cbor_item_t_ref], :size_t
+		attach_function :cbor_bytestring_handle, [:cbor_item_t_ref], :memblock
 	end
 end
