@@ -56,6 +56,18 @@ module CBOR
 			end
 		end
 
+		context 'for array [1, 2]' do
+			subject { CBOR.load_native("\x82\x1\x2") }
+
+			it 'returns array type' do
+				expect(subject.type).to eq :array
+			end
+
+			it 'returns value [1, 2]' do
+				expect(subject.value).to eq [1, 2]
+			end
+		end
+
 		context 'for "true" simple value' do
 			subject { CBOR.load_native("\xF5") }
 

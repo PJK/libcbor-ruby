@@ -3,7 +3,8 @@ module CBOR
 		extend FFI::Library
 		ffi_lib 'cbor'
 
-		typedef :pointer, :cbor_item_t_ref
+		CborItemTRef = typedef :pointer, :cbor_item_t_ref
+		typedef :pointer, :cbor_item_t_ref_array
 		typedef :pointer, :buffer
 		typedef :pointer, :memblock # unsigned char * - string & bytestring handles, raw blocks
 
@@ -51,6 +52,9 @@ module CBOR
 
 		attach_function :cbor_bytestring_length, [:cbor_item_t_ref], :size_t
 		attach_function :cbor_bytestring_handle, [:cbor_item_t_ref], :memblock
+
+		attach_function :cbor_array_size, [:cbor_item_t_ref], :size_t
+		attach_function :cbor_array_handle, [:cbor_item_t_ref], :cbor_item_t_ref_array
 
 		attach_function :cbor_float_ctrl_is_ctrl, [:cbor_item_t_ref], :bool
 		attach_function :cbor_ctrl_value, [:cbor_item_t_ref], :uint8

@@ -19,6 +19,13 @@ module CBOR
 					LibCBOR
 						.cbor_bytestring_handle(handle)
 						.get_string(0, LibCBOR.cbor_bytestring_length(handle))
+				when :array
+					LibCBOR
+						.cbor_array_handle(handle)
+						.read_array_of_type(LibCBOR::CborItemTRef, :read_pointer, LibCBOR.cbor_array_size(handle))
+						.map { |item| CBORItem.new(item).value }
+				when :map
+
 				when :float_ctrl
 					if LibCBOR.cbor_float_ctrl_is_ctrl(handle)
 						case ctr_val = LibCBOR.cbor_ctrl_value(handle)
