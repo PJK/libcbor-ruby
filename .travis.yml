@@ -10,7 +10,7 @@ before_install:
   - wget https://github.com/PJK/libcbor/archive/master.zip
   - unzip master.zip
   - cd libcbor-master
-  - cmake
+  - cmake .
   - make libcbor
   - sudo make install
   - cd ..
