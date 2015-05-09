@@ -12,9 +12,7 @@ module CBOR
 				when :negint
 					-LibCBOR.cbor_get_int(handle) - 1
 				when :string
-					LibCBOR
-						.cbor_string_handle(handle)
-						.get_string(0, LibCBOR.cbor_string_length(handle))
+					load_string
 				when :bytestring
 					LibCBOR
 						.cbor_bytestring_handle(handle)
@@ -59,6 +57,20 @@ module CBOR
 			else
 				LibCBOR.cbor_float_get_float(handle)
 			end
+		end
+
+		def load_string
+			if LibCBOR.cbor_string_is_definite(handle)
+				LibCBOR
+					.cbor_string_handle(handle)
+					.get_string(0, LibCBOR.cbor_string_length(handle))
+			else
+				LibCBOR
+					.cbor_string_chunks_handle(handle)
+					.read_array_of_type(LibCBOR::CborItemTRef, :read_pointer, LibCBOR.cbor_string_chunk_count(handle))
+					.map { |item| CBORItem.new(item).value }
+					.join
+				end
 		end
 	end
 end

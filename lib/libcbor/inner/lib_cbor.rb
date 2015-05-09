@@ -56,6 +56,9 @@ module CBOR
 
 		attach_function :cbor_string_length, [:cbor_item_t_ref], :size_t
 		attach_function :cbor_string_handle, [:cbor_item_t_ref], :memblock
+		attach_function :cbor_string_is_definite, [:cbor_item_t_ref], :bool
+		attach_function :cbor_string_chunks_handle, [:cbor_item_t_ref], :cbor_item_t_ref_array
+		attach_function :cbor_string_chunk_count, [:cbor_item_t_ref], :size_t
 
 		attach_function :cbor_bytestring_length, [:cbor_item_t_ref], :size_t
 		attach_function :cbor_bytestring_handle, [:cbor_item_t_ref], :memblock
