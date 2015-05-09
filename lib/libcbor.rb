@@ -8,6 +8,8 @@ require 'pry'
 require 'libcbor/version'
 require 'libcbor/inner/lib_cbor'
 require 'libcbor/inner/lib_c'
+require 'libcbor/cache'
+require 'libcbor/tag'
 require 'libcbor/helpers'
 
 module CBOR

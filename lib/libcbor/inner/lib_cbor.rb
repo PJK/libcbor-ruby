@@ -9,6 +9,10 @@ module CBOR
 		attach_function :cbor_encode_single, [:float, :pointer, :size_t], :size_t
 		attach_function :cbor_encode_array_start, [:size_t, :pointer, :size_t], :size_t
 		attach_function :cbor_encode_map_start, [:size_t, :pointer, :size_t], :size_t
+		attach_function :cbor_encode_tag, [:uint64, :pointer, :size_t], :size_t
+		attach_function :cbor_encode_bool, [:bool, :pointer, :size_t], :size_t
+		attach_function :cbor_encode_null, [:pointer, :size_t], :size_t
+		attach_function :cbor_encode_undef, [:pointer, :size_t], :size_t
 		# size_t cbor_serialize_alloc(const cbor_item_t * item, unsigned char ** buffer, size_t * buffer_size);
 		attach_function :cbor_serialize_alloc, [:pointer, :pointer, :pointer], :size_t
 

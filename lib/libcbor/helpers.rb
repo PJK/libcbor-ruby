@@ -55,11 +55,29 @@ module CBOR
 			end
 		end
 
-		class Tag
+		class CBOR::Tag
 			def __to_cbor
 				@@bfr ||= FFI::Buffer.new(:uchar, 9)
-				header = @@bfr.get_bytes(0, LibCBOR.cbor_encode_map_start(count, @@bfr, 9))
+				header = @@bfr.get_bytes(0, LibCBOR.cbor_encode_tag(value, @@bfr, 9))
+				header + item.__to_cbor
+			end
+		end
 
+		class ::TrueClass
+			def __to_cbor
+				Cache.true
+			end
+		end
+
+		class ::FalseClass
+			def __to_cbor
+				Cache.false
+			end
+		end
+
+		class ::NilClass
+			def __to_cbor
+				Cache.nil
 			end
 		end
 	end

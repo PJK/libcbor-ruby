@@ -37,5 +37,31 @@ module CBOR
 				expect({ 1 => 2 }.__to_cbor.bytes).to eq [0xA1, 1, 2]
 			end
 		end
+
+		describe Tag do
+			it 'returns correct bytes' do
+				expect(Tag.new(42, 0).__to_cbor.bytes).to eq [0xD8,  0x2A, 0]
+			end
+		end
+
+		describe 'simple values' do
+			describe true do
+				it 'returns correct bytes' do
+					expect(true.__to_cbor.bytes).to eq [0xF5]
+				end
+			end
+
+			describe false do
+				it 'returns correct bytes' do
+					expect(false.__to_cbor.bytes).to eq [0xF4]
+				end
+			end
+
+			describe nil do
+				it 'returns correct bytes' do
+					expect(nil.__to_cbor.bytes).to eq [0xF6]
+				end
+			end
+		end
 	end
 end
