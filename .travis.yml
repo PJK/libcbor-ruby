@@ -6,3 +6,11 @@ rvm:
   - 2.1.1
   - 2.2.1
 script: bundle exec rspec spec
+before_install:
+  - wget https://github.com/PJK/libcbor/archive/master.zip
+  - unzip master.zip
+  - cd libcbor-master
+  - cmake
+  - make libcbor
+  - sudo make install
+  - cd ..
