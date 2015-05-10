@@ -1,3 +1,4 @@
 module CBOR
-  VERSION = "0.1.0-alpha"
+ 	# The current version. It is completely independent of libcbor's version
+  VERSION = '0.1.0-alpha'
 end

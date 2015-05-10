@@ -9,7 +9,7 @@ require 'libcbor/inner/lib_c'
 require 'libcbor/cache'
 require 'libcbor/tag'
 require 'libcbor/helpers'
-require 'libcbor/cbor_item'
+require 'libcbor/item'
 require 'libcbor/streaming/callback_simplifier'
 require 'libcbor/streaming/buffered_decoder'
 require 'libcbor/streaming/encoder'
@@ -55,7 +55,7 @@ module CBOR
 	# @raise [DecodingError] when presented with invalid data
 	def self.decode(data)
 		res = FFI::MemoryPointer.new LibCBOR::CborLoadResult
-		CBORItem.new(
+		Item.new(
 			LibCBOR.cbor_load(FFI::MemoryPointer.from_string(data), data.bytes.count, res).
 				tap { |ptr| raise DecodingError if ptr.null? }
 		).value

@@ -1,10 +1,23 @@
 module CBOR
-	# Wraps native `cbor_item_t *`
-	class CBORItem < Struct.new(:handle)
+	# Wraps native +cbor_item_t *+ to allow extracting Ruby objects
+	#
+	# Takes responsibility for high-level native interfacing and object
+	# lifetime management.
+	#
+	# @attr [FFI::Pointer] handle Native memory handle
+	class Item < Struct.new(:handle)
+		# Type of the underlying item
+		#
+		# @return [Symbol] one of {LibCBOR::Type}
 		def type
 			LibCBOR.cbor_typeof(handle)
 		end
 
+		# Ruby representation of the {Item}
+		#
+		# Arrays and hash maps are constructed recursively
+		#
+		# @return [Fixnum, String, Float, Array, Map, Tag, TrueClass, FalseClass, NilClass] Value extracted from the {#handle}
 		def value
 			case type
 				when :uint
@@ -21,17 +34,17 @@ module CBOR
 					LibCBOR
 						.cbor_array_handle(handle)
 						.read_array_of_type(LibCBOR::CborItemTRef, :read_pointer, LibCBOR.cbor_array_size(handle))
-						.map { |item| CBORItem.new(item).value }
+						.map { |item| Item.new(item).value }
 				when :map
 					pairs_handle = LibCBOR.cbor_map_handle(handle)
 					Hash[LibCBOR.cbor_map_size(handle).times.map { |idx|
 						pair = LibCBOR::CborPair.new(pairs_handle + LibCBOR::CborPair.size * idx)
-						[pair[:key], pair[:value]].map { |ptr| CBORItem.new(ptr).value }
+						[pair[:key], pair[:value]].map { |ptr| Item.new(ptr).value }
 					}]
 				when :tag
 					Tag.new(
 						LibCBOR.cbor_tag_value(handle),
-						CBORItem.new(LibCBOR.cbor_tag_item(handle)).value
+						Item.new(LibCBOR.cbor_tag_item(handle)).value
 					)
 				when :float_ctrl
 					load_float
@@ -68,7 +81,7 @@ module CBOR
 				LibCBOR
 					.cbor_string_chunks_handle(handle)
 					.read_array_of_type(LibCBOR::CborItemTRef, :read_pointer, LibCBOR.cbor_string_chunk_count(handle))
-					.map { |item| CBORItem.new(item).value }
+					.map { |item| Item.new(item).value }
 					.join
 				end
 		end
