@@ -14,7 +14,13 @@ before_install:
   - wget https://github.com/PJK/libcbor/archive/master.zip
   - unzip master.zip
   - cd libcbor-master
+  - git submodule update test/cmocka
+  - cd test
+  - mkdir cmocka_build && cd cmocka_build
+  - cmake ../cmocka
+  - make -j 4
+  - sudo make install
+  - cd ..
   - cmake .
-  - make cbor cbor_shared
   - sudo make install
   - cd ..
