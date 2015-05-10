@@ -14,7 +14,8 @@ require 'libcbor/streaming/callback_simplifier'
 require 'libcbor/streaming/buffered_decoder'
 require 'libcbor/streaming/encoder'
 
-# Top level namespace
+# Provides encoding, decoding, and streaming interaction with CBOR data.
+# Please refer to {file:README.md} for an overview and a short tutorial.
 module CBOR
 	# Thrown when the decoded data is either invalid or not well-formed
 	class DecodingError < StandardError; end
@@ -49,7 +50,7 @@ module CBOR
 
 	# Deserialize CBOR
 	#
-	# @param [String] input
+	# @param [String] data
 	# @return [Fixnum, String, Float, Array, Map, Tag, TrueClass, FalseClass, NilClass] resulting object
 	# @raise [DecodingError] when presented with invalid data
 	def self.decode(data)
