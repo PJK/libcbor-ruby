@@ -1,7 +1,7 @@
 module CBOR
 	module LibCBOR
 		extend FFI::Library
-		ffi_lib 'cbor'
+		ffi_lib ['cbor', 'libcbor.so.1', '/usr/local/lib/libcbor.so']
 
 		CborItemTRef = typedef :pointer, :cbor_item_t_ref
 		typedef :pointer, :cbor_item_t_ref_array
