@@ -39,7 +39,7 @@ module CBOR
 	# Load the extensions for the core classes
 	#
 	# @param [Symbol] name the name to use for the encoding method. If not provided, +to_cbor+ will be used
-	# @return nil
+	# @return [Array] list of the patched classes
 	def self.load!(name = nil)
 		@@method_name = name
 		%w{Fixnum Float Array Hash String TrueClass FalseClass NilClass Tag}.each do |klass|
@@ -47,6 +47,11 @@ module CBOR
 		end
 	end
 
+	# Deserialize CBOR
+	#
+	# @param [String] input
+	# @return [Fixnum, String, Float, Array, Map, Tag, TrueClass, FalseClass, NilClass] resulting object
+	# @raise [DecodingError] when presented with invalid data
 	def self.decode(data)
 		res = FFI::MemoryPointer.new LibCBOR::CborLoadResult
 		CBORItem.new(
