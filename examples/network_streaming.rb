@@ -7,17 +7,13 @@
 # Make sure to install EventMachine first (`$ gem install eventmachine`)
 #
 # Start with
-#
 # $ ./examples/network_streaming.rb
 #
 # Then send data from the example file using netcat or a similar tool:
-#
 # $ netcat localhost 9000 < examples/data/indef_array.cbor
 #
 # The file from the example contains the CBOR representation of
-#
 #   [_ [_ 1, 2], 3, [_ 4, [_ 5]]]
-#
 # Terminate with ^c
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..'))
