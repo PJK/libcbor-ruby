@@ -97,6 +97,7 @@ module CBOR
 		callback :cbor_double_callback, [:pointer, :double], :void
 		callback :cbor_bool_callback, [:pointer, :bool], :void
 
+		# The +cbor_callbacks+ callback bundle equivalent
 		class CborCallbacks < FFI::Struct
 			layout :uint8, :cbor_int8_callback,
 				:uint16, :cbor_int16_callback,

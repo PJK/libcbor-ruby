@@ -1,5 +1,8 @@
 module CBOR
 	module Streaming
+		# Decodes a stream of data and invokes the appropriate callbacks
+		#
+		# TODO doc them
 		class BufferedDecoder
 			def initialize(callbacks = {})
 				@callbacks = {
