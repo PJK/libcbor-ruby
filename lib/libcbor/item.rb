@@ -55,6 +55,9 @@ module CBOR
 
 		protected
 
+		# Loads float, doesn't check the type
+		#
+		# @return [Float] the result
 		def load_float
 			if LibCBOR.cbor_float_ctrl_is_ctrl(handle)
 				case ctr_val = LibCBOR.cbor_ctrl_value(handle)
@@ -72,6 +75,11 @@ module CBOR
 			end
 		end
 
+		# Loads string, doesn't check the type
+		#
+		# If the underlying string is indefinite, the concatenation of its chunk is returned
+		#
+		# @return [String] the result
 		def load_string
 			if LibCBOR.cbor_string_is_definite(handle)
 				LibCBOR
