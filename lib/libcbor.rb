@@ -23,7 +23,7 @@ module CBOR
 	# Custom semantics are supported - the object has to to provide the +to_cbor+ method
 	# In case {CBOR.method_name} is not +to_cbor+, provide the custom method instead.
 	#
-	# @param [Fixnum, String, Float, Array, Map, Tag, #to_cbor] object the object to encode
+	# @param [Fixnum, String, Float, Array, Map, Tag, TrueClass, FalseClass, NilClass, #to_cbor] object the object to encode
 	# @return [String] the CBOR representation
 	def self.encode(object)
 		object.to_cbor
