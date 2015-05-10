@@ -8,4 +8,4 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..'))
 require 'lib/libcbor'
 require 'pp'
 
-ARGV.each { |_| PP.pp  CBOR.decode(IO.read(_)) }
+ARGV.each { |_| PP.pp CBOR.decode(IO.read(_)) }
