@@ -1,25 +1,36 @@
 module CBOR
+	# Provides low-level binding for the native functions
 	module LibCBOR
 		extend FFI::Library
 		ffi_lib ['cbor', 'libcbor.so.1', '/usr/local/lib/libcbor.so']
 
+		# The +cbor_item_t *+ handle type
 		CborItemTRef = typedef :pointer, :cbor_item_t_ref
+
+		# The CBOR types enum mapping
+		Type = enum(:uint, :negint, :bytestring, :string, :array, :map, :tag, :float_ctrl)
+
+
 		typedef :pointer, :cbor_item_t_ref_array
 		typedef :pointer, :buffer
 		typedef :pointer, :memblock # unsigned char * - string & bytestring handles, raw blocks
 
+		# Possible error codes for the +cbor_error+
 		ErrorCode = enum(:none, :notenoughdata, :nodata, :malformated, :memerror, :syntaxerror)
 
+		# Represents +cbor_error+ decoding error
 		class CborError < FFI::Struct
 			layout :position, :size_t,
 				:code, ErrorCode
 		end
 
+		# Represents +cbor_load_result+ struct
 		class CborLoadResult < FFI::Struct
 			layout :error, CborError,
 				:read, :size_t
 		end
 
+		# Represents +cbor_pair+ for map manipualtion
 		class CborPair < FFI::Struct
 			layout :key, CborItemTRef,
 				:value, CborItemTRef
@@ -47,7 +58,6 @@ module CBOR
 		# void cbor_string_set_handle(cbor_item_t *item, unsigned char *data, size_t length);
 		attach_function :cbor_string_set_handle, [:pointer, :pointer, :size_t], :void
 
-		Type = enum(:uint, :negint, :bytestring, :string, :array, :map, :tag, :float_ctrl)
 
 		attach_function :cbor_typeof, [:cbor_item_t_ref], Type
 		attach_function :cbor_load, [:buffer, :size_t, :cbor_load_result_ref], :cbor_item_t_ref
@@ -123,8 +133,10 @@ module CBOR
 				:indef_break, :cbor_simple_callback
 		end
 
+		# High-level decoder status enum mapping
 		DecoderStatus = enum(:finished, :not_enough_data, :buffer_error, :error)
 
+		# Represents +cbor_decoder_result+ struct
 		class CborDecoderResult < FFI::Struct
 			layout :read, :size_t,
 				:status, DecoderStatus

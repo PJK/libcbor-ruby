@@ -1,4 +1,4 @@
-# Provides
+# Provides native memory management
 module CBOR::LibC
 	extend FFI::Library
 	ffi_lib FFI::Library::LIBC
