@@ -13,7 +13,7 @@ before_install:
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90
   - git clone https://github.com/PJK/libcbor.git
   - cd libcbor
-  - git submodule update test/cmocka
+  - git submodule update --init test/cmocka
   - cd test
   - mkdir cmocka_build && cd cmocka_build
   - cmake ../cmocka
