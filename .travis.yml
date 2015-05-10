@@ -19,7 +19,7 @@ before_install:
   - cmake ../cmocka
   - make -j 4
   - sudo make install
-  - cd ..
+  - cd ../..
   - cmake .
   - sudo make install
   - cd ..
