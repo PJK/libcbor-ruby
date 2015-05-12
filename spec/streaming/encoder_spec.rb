@@ -36,6 +36,12 @@ module CBOR
 				subject.break
 				expect(CBOR.decode(target.string)).to eq 'Hello World'
 			end
+
+			it 'encodes tags' do
+				subject.tag(5)
+				subject << 42
+				expect(CBOR.decode(target.string)).to eq Tag.new(5, 42)
+			end
 		end
 	end
 end

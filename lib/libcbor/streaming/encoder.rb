@@ -59,7 +59,9 @@ module CBOR
 			# @return [void]
 			def tag(value)
 				@@bfr ||= FFI::Buffer.new(:uchar, 9)
-				@@bfr.get_bytes(0, LibCBOR.cbor_encode_tag(value, @@bfr, 9))
+				stream.write(
+					@@bfr.get_bytes(0, LibCBOR.cbor_encode_tag(value, @@bfr, 9))
+				)
 			end
 
 			# Encodes indefinite item break code.
