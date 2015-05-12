@@ -5,13 +5,11 @@
 #
 # Usage:
 # $ cat examples/data/indef_array.cbor | ./examples/converter.rb | ./examples/converter.rb --to-cbor | ./examples/converter.rb
- 
+
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..'))
-require 'lib/libcbor'
+require 'lib/libcbor/all'
 require 'trollop'
 require 'json'
-
-CBOR.load!
 
 opts = Trollop::options do
 	banner <<-EOS
