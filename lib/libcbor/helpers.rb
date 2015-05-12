@@ -4,7 +4,7 @@ module CBOR
 		# Encodes Fixnums. Width and signedness are handled automatically.
 		#
 		# @return [String] The CBOR representation
-		def to_cbor
+		def __libcbor_to_cbor
 			@@bfr ||= FFI::Buffer.new(:uchar, 9)
 			if self >= 0
 				@@bfr.get_bytes(0, LibCBOR.cbor_encode_uint(self, @@bfr, 9))
@@ -19,7 +19,7 @@ module CBOR
 		# Encodes Floatss. Width and precision are handled automatically
 		#
 		# @return [String] The CBOR representation
-		def to_cbor
+		def __libcbor_to_cbor
 			@@bfr ||= FFI::Buffer.new(:uchar, 9)
 			@@bfr.get_bytes(0, LibCBOR.cbor_encode_single(self, @@bfr, 9))
 		end
@@ -33,7 +33,7 @@ module CBOR
 		# is not verified.
 		#
 		# @return [String] The CBOR representation
-		def to_cbor
+		def __libcbor_to_cbor
 			@@item ||= LibCBOR.cbor_new_definite_string
 			string = FFI::MemoryPointer.from_string(self)
 			out_bfr = FFI::MemoryPointer.new :pointer
@@ -53,11 +53,11 @@ module CBOR
 		# The members are encoded recursively using the +to_cbor+ method or its equivalent
 		#
 		# @return [String] The CBOR representation
-		def to_cbor
+		def __libcbor_to_cbor
 			@@bfr ||= FFI::Buffer.new(:uchar, 9)
 			header = @@bfr.get_bytes(0, LibCBOR.cbor_encode_array_start(count, @@bfr, 9))
 			each do |member|
-				header += member.to_cbor
+				header += member.public_send(CBOR.method_name)
 			end
 			header
 		end
@@ -70,12 +70,12 @@ module CBOR
 		# The members are encoded recursively using the +to_cbor+ method or its equivalent
 		#
 		# @return [String] The CBOR representation
-		def to_cbor
+		def __libcbor_to_cbor
 			@@bfr ||= FFI::Buffer.new(:uchar, 9)
 			header = @@bfr.get_bytes(0, LibCBOR.cbor_encode_map_start(count, @@bfr, 9))
 			each do |member|
-				header += member.first.to_cbor
-				header += member.last.to_cbor
+				header += member.first.public_send(CBOR.method_name)
+				header += member.last.public_send(CBOR.method_name)
 			end
 			header
 		end
@@ -88,10 +88,10 @@ module CBOR
 		# The {Tag#item} is encoded recursively using the +to_cbor+ method or its equivalent
 		#
 		# @return [String] The CBOR representation
-		def to_cbor
+		def __libcbor_to_cbor
 			@@bfr ||= FFI::Buffer.new(:uchar, 9)
 			header = @@bfr.get_bytes(0, LibCBOR.cbor_encode_tag(value, @@bfr, 9))
-			header + item.to_cbor
+			header + item.public_send(CBOR.method_name)
 		end
 	end
 
@@ -100,7 +100,7 @@ module CBOR
 		# Encodes +true+s.
 		#
 		# @return [String] The CBOR representation
-		def to_cbor
+		def __libcbor_to_cbor
 			Cache.true
 		end
 	end
@@ -110,7 +110,7 @@ module CBOR
 		# Encodes +false+s.
 		#
 		# @return [String] The CBOR representation
-		def to_cbor
+		def __libcbor_to_cbor
 			Cache.false
 		end
 	end
@@ -120,7 +120,7 @@ module CBOR
 		# Encodes +nil+s.
 		#
 		# @return [String] The CBOR representation
-		def to_cbor
+		def __libcbor_to_cbor
 			Cache.nil
 		end
 	end

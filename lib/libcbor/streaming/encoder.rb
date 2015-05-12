@@ -15,7 +15,7 @@ module CBOR
 			# @param [#to_cbor] object Object to serialize and write
 			# @return [void]
 			def <<(object)
-				stream.write(object.to_cbor)
+				stream.write(object.public_send(CBOR.method_name))
 			end
 
 			# Encodes a 'start array' mark. You are responsible for

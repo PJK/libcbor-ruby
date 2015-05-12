@@ -43,9 +43,11 @@ module CBOR
 	# @param [Symbol] name the name to use for the encoding method. If not provided, +to_cbor+ will be used
 	# @return [Array] list of the patched classes
 	def self.load!(name = nil)
-		@@method_name = name
+		@@method_name = name || :to_cbor
 		%w{Fixnum Float Array Hash String TrueClass FalseClass NilClass Tag}.each do |klass|
-			const_get(klass).send(:include, const_get('::CBOR::' + klass + 'Helper'))
+			kklass = const_get(klass)
+			kklass.send(:include, const_get('::CBOR::' + klass + 'Helper'))
+			kklass.send(:alias_method, method_name, :__libcbor_to_cbor)
 		end
 	end
 
