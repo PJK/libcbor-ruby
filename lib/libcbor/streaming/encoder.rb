@@ -39,7 +39,7 @@ module CBOR
 			#
 			# @return [void]
 			def start_chunked_string
-				stream.write("\x9f")
+				stream.write("\x7f")
 			end
 
 			# Encodes a 'start indefinite byte string' mark. You are responsible

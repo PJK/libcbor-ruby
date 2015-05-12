@@ -14,6 +14,28 @@ module CBOR
 
 				expect(CBOR.decode(target.string)).to eq [1, 2]
 			end
+
+			it 'encodes maps' do
+				subject.start_map
+				subject.break
+				expect(CBOR.decode(target.string)).to eq Hash.new
+			end
+
+			it 'encodes strings' do
+				subject.start_chunked_string
+				subject << 'Hello '
+				subject << 'World'
+				subject.break
+				expect(CBOR.decode(target.string)).to eq 'Hello World'
+			end
+
+			it 'encodes byte strings' do
+				subject.start_chunked_byte_string
+				subject << ByteString.new('Hello ')
+				subject << ByteString.new('World')
+				subject.break
+				expect(CBOR.decode(target.string)).to eq 'Hello World'
+			end
 		end
 	end
 end
