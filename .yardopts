@@ -1,1 +1,1 @@
-yardoc lib/**/*rb
+yardoc lib/**/*rb -M redcarpet
