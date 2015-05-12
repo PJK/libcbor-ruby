@@ -75,6 +75,23 @@ describe CBOR do
 			end
 		end
 
+		context 'for "false" simple value' do
+			subject { CBOR.decode("\xF4") }
+
+			it 'provides translation' do
+				expect(subject).to eq false
+			end
+		end
+
+		context 'for "0" simple value' do
+			subject { CBOR.decode("\xE8\xFF") }
+
+			#TODO: enable this after libcbor is fixed
+			xit 'provides translation' do
+				expect(subject).to eq SimpleValue.new(255)
+			end
+		end
+
 		context 'for 3.14 float' do
 			subject { CBOR.decode([250, 64, 72, 245, 195].pack('c*')) }
 
