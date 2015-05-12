@@ -2,8 +2,26 @@ module CBOR
 	module Streaming
 		# Decodes a stream of data and invokes the appropriate callbacks
 		#
-		# TODO doc them
+		# To use it, just initialize it with the desired set of callbacks and start
+		# feeding data to it. Please see {file:examples/network_streaming.rb} for
+		# an example
 		class BufferedDecoder
+			# @param [Hash] callbacks the callbacks to invoke during parsing.
+			# @option callbacks [Proc<Fixnum>] :integer Integers, both positive and negative
+			# @option callbacks [Proc<String>] :string Definite string
+			# @option callbacks [Proc] :chunked_string_start Chunked string. Chunks follow
+			# @option callbacks [Proc<String>] :byte_string Definite byte string
+			# @option callbacks [Proc] :chunked_byte_string_start Chunked byte string. Chunks follow
+			# @option callbacks [Proc<Float>] :float Float
+			# @option callbacks [Proc<length: Fixnum>] :definite_array Definite array
+			# @option callbacks [Proc] :array_start Indefinite array start
+			# @option callbacks [Proc<length: Fixnum>] :definite_map Definite map. Length pairs follow
+			# @option callbacks [Proc] :map_start Indefinite map start
+			# @option callbacks [Proc<value: Fixnum>] :tag Tag. Tagged item follows
+			# @option callbacks [Proc<Bool>] :bool Boolean
+			# @option callbacks [Proc] :null Null
+			# @option callbacks [Proc<value: Fixnum>] :simple Simple value other than +true, false, nil+
+			# @option callbacks [Proc] :break Indefinite item break
 			def initialize(callbacks = {})
 				@callbacks = {
 					integer: Proc.new {},
@@ -26,20 +44,43 @@ module CBOR
 				@proxy = CallbackSimplifier.new(self)
 			end
 
+			# Append data to the internal buffer.
+			#
+			# Parsing will ensue and all the appropriate callbacks will be invoked.
+			# The method will block until all the callbacks have finished.
+			#
+			# @param [String] data CBOR input data
+			# @return [void]
+			# @raise [DecodingError] if the decoder encountered a invalid input
 			def <<(data)
 				@buffer += data
 				loop do
-					read = LibCBOR.cbor_stream_decode(
+					result = LibCBOR.cbor_stream_decode(
 						FFI::MemoryPointer.from_string(@buffer),
 						@buffer.bytes.length,
 						@proxy.callback_set.to_ptr,
 						nil
-					)[:read]
-					break if read == 0
+					)
+					read = result[:read]
+
+					break if read == 0 && result[:status] == :not_enough_data
+
+					unless result[:status] == :finished
+						raise DecodingError, "Invalid input near byte #{read} of the buffer."
+					end
+
 					@buffer = @buffer[read .. -1]
+
+					break if buffer.empty?
 				end
 			end
 
+			# @api private
+			# Invocation target for the callback proxy. Do not use.
+			#
+			# @param [Symbol] name Callback name
+			# @param [Array] args Arguments to pass on
+			# @return [void]
 			def callback(name, *args)
 				callbacks[name].call(*args)
 			end

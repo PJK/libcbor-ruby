@@ -1,34 +1,77 @@
 module CBOR
 	module Streaming
-		class Encoder < Struct.new(:target)
+		# Provides streaming encoding facilities. Initialize it with an output
+		# object and either feed it encodable objects, or invoke the methods
+		# directly
+		class Encoder
+			# @param [StringIO, Socket, File, #write] stream Output object. Must support
+			#		+write+ method that takes a +String+ as a parametr
+			def initialize(stream)
+				@stream = stream
+			end
+
+			# Serializes and writes an object to the stream
+			#
+			# @param [#to_cbor] object Object to serialize and write
+			# @return [void]
 			def <<(object)
-				target.write(object.to_cbor)
+				stream.write(object.to_cbor)
 			end
 
+			# Encodes a 'start array' mark. You are responsible for
+			# correctly {#break}ing it
+			#
+			# @return [void]
 			def start_array
-				target.write("\x9f")
+				stream.write("\x9f")
 			end
 
+			# Encodes a 'start map' mark. You are responsible for
+			# correctly {#break}ing it
+			#
+			# @return [void]
 			def start_map
-				target.write("\xbf")
+				stream.write("\xbf")
 			end
 
+			# Encodes a 'start indefinite string' mark. You are responsible
+			# for correctly {#break}ing it
+			#
+			# @return [void]
 			def start_chunked_string
-				target.write("\x9f")
+				stream.write("\x9f")
 			end
 
+			# Encodes a 'start indefinite byte string' mark. You are responsible
+			# for correctly {#break}ing it
+			#
+			# @return [void]
 			def start_chunked_byte_string
-				target.write("\x5f")
+				stream.write("\x5f")
 			end
 
+			# Encodes a tag with the give +value+.
+			#
+			# You are responsible for correctly supplying the item that
+			# follows (i.e. the one the tag will apply to)
+			#
+			# @param [Fixnum] value Tag value.
+			# @return [void]
 			def tag(value)
 				@@bfr ||= FFI::Buffer.new(:uchar, 9)
 				@@bfr.get_bytes(0, LibCBOR.cbor_encode_tag(value, @@bfr, 9))
 			end
 
+			# Encodes indefinite item break code.
+			#
+			# @return [void]
 			def break
-				target.write("\xff")
+				stream.write("\xff")
 			end
+
+			protected
+
+			attr_accessor :stream
 		end
 	end
 end

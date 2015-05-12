@@ -1,7 +1,12 @@
 module CBOR
 	module Streaming
+		# @api private
 		# Abstracts aways callback specifics, such as integer width
 		class CallbackSimplifier < Struct.new(:target)
+			# Returns the appropriate callback set targeting {#target}. Cached for the
+			# give instance.
+			#
+			# @return [LibCBOR::CborCallbacks] Callback set that enables forwarding
 			def callback_set
 				@cset ||= build_callback_set
 			end
