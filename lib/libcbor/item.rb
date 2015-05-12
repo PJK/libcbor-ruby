@@ -27,9 +27,7 @@ module CBOR
 				when :string
 					load_string
 				when :bytestring
-					LibCBOR
-						.cbor_bytestring_handle(handle)
-						.get_string(0, LibCBOR.cbor_bytestring_length(handle))
+					load_bytestring
 				when :array
 					LibCBOR
 						.cbor_array_handle(handle)
@@ -77,7 +75,7 @@ module CBOR
 
 		# Loads string, doesn't check the type
 		#
-		# If the underlying string is indefinite, the concatenation of its chunk is returned
+		# If the underlying string is indefinite, the concatenation of its chunks is returned
 		#
 		# @return [String] the result
 		def load_string
@@ -92,6 +90,30 @@ module CBOR
 					.map { |item| Item.new(item).value }
 					.join
 				end
+		end
+
+		# Loads byte string, doesn't check the type
+		#
+		# If the underlying string is indefinite, the concatenation of its chunks is returned
+		#
+		# @return [String] the result
+		def load_bytestring
+			# TODO: DRY - load_string
+			if LibCBOR.cbor_bytestring_is_definite(handle)
+				ByteString.new(
+					LibCBOR
+						.cbor_bytestring_handle(handle)
+						.get_string(0, LibCBOR.cbor_bytestring_length(handle))
+				)
+			else
+				ByteString.new(
+					LibCBOR
+						.cbor_bytestring_chunks_handle(handle)
+						.read_array_of_type(LibCBOR::CborItemTRef, :read_pointer, LibCBOR.cbor_bytestring_chunk_count(handle))
+						.map { |item| Item.new(item).value }
+						.join
+				)
+			end
 		end
 	end
 end

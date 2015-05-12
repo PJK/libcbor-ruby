@@ -52,11 +52,11 @@ module CBOR
 		#
 		# @return [String] The CBOR representation
 		def __libcbor_to_cbor
-			@@item ||= LibCBOR.cbor_new_definite_byte_string
+			@@item ||= LibCBOR.cbor_new_definite_bytestring
 			string = FFI::MemoryPointer.from_string(self)
 			out_bfr = FFI::MemoryPointer.new :pointer
 			out_bfr_len = FFI::MemoryPointer.new :size_t
-			LibCBOR.cbor_bytestringstring_set_handle(@@item, string, bytes.length)
+			LibCBOR.cbor_bytestring_set_handle(@@item, string, bytes.length)
 			res_len = LibCBOR.cbor_serialize_alloc(@@item, out_bfr, out_bfr_len)
 			out_bfr.read_pointer.get_bytes(0, res_len).tap do
 				LibC.free(out_bfr.read_pointer)

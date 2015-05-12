@@ -55,8 +55,10 @@ module CBOR
 		attach_function :cbor_serialize_alloc, [:pointer, :pointer, :pointer], :size_t
 
 		attach_function :cbor_new_definite_string, [], :pointer
+		attach_function :cbor_new_definite_bytestring, [], :pointer
 		# void cbor_string_set_handle(cbor_item_t *item, unsigned char *data, size_t length);
 		attach_function :cbor_string_set_handle, [:pointer, :pointer, :size_t], :void
+		attach_function :cbor_bytestring_set_handle, [:pointer, :pointer, :size_t], :void
 
 
 		attach_function :cbor_typeof, [:cbor_item_t_ref], Type
