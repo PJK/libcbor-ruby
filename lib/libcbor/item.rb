@@ -66,7 +66,7 @@ module CBOR
 					when 22
 						nil
 					else
-						ctr_val
+						SimpleValue.new(ctr_val)
 				end
 			else
 				LibCBOR.cbor_float_get_float(handle)

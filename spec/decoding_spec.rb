@@ -83,12 +83,11 @@ describe CBOR do
 			end
 		end
 
-		context 'for "0" simple value' do
-			subject { CBOR.decode("\xE8\xFF") }
+		context 'for "undef" simple value' do
+			subject { CBOR.decode("\xF7") }
 
-			#TODO: enable this after libcbor is fixed
-			xit 'provides translation' do
-				expect(subject).to eq SimpleValue.new(255)
+			it 'provides translation' do
+				expect(subject).to eq CBOR::SimpleValue.new(23)
 			end
 		end
 
