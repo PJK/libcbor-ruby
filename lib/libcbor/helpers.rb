@@ -1,7 +1,7 @@
 module CBOR
-	# Provides the {#to_cbor} (or equivalent) method for Fixnums
-	module FixnumHelper
-		# Encodes Fixnums. Width and signedness are handled automatically.
+	# Provides the {#to_cbor} (or equivalent) method for Integers
+	module IntegerHelper
+		# Encodes Integers. Width and signedness are handled automatically.
 		#
 		# @return [String] The CBOR representation
 		def __libcbor_to_cbor

@@ -4,7 +4,7 @@ module CBOR
 	describe 'Encoding' do
 		before(:all) { CBOR.load! }
 
-		describe Fixnum do
+		describe Integer do
 			it 'returns correct bytes' do
 				expect(2.to_cbor).to eq "\x02"
 				expect(-2.to_cbor).to eq "\x21"

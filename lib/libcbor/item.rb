@@ -17,7 +17,7 @@ module CBOR
 		#
 		# Arrays and hash maps are constructed recursively
 		#
-		# @return [Fixnum, String, Float, Array, Map, Tag, TrueClass, FalseClass, NilClass] Value extracted from the {#handle}
+		# @return [Integer, String, Float, Array, Map, Tag, TrueClass, FalseClass, NilClass] Value extracted from the {#handle}
 		def value
 			case type
 				when :uint
