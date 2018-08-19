@@ -145,7 +145,8 @@ module CBOR
 		# Represents +cbor_decoder_result+ struct
 		class CborDecoderResult < FFI::Struct
 			layout :read, :size_t,
-				:status, DecoderStatus
+				:status, DecoderStatus,
+				:required, :size_t
 		end
 
 		# buffer, buffer size, callbacks, context
