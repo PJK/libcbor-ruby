@@ -1,24 +1,42 @@
 language: ruby
+sudo: true
 rvm:
-  #- rbx-2.1.1
   - 2.0.0
   - 2.1.1
   - 2.2.1
+  - 2.3
+  - 2.4
+  - 2.5
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-precise-3.6
+    - george-edison55-precise-backports # cmake 3.2.3 / doxygen 1.8.3
+    packages:
+    - clang-3.6
+    - libjansson-dev
+    - valgrind
+    - cppcheck
+    - lcov
+    - cmake
+    - cmake-data
+env: CC="clang-3.6" CXX="clang++-3.6"
 script: bundle exec rspec spec
 before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update -qq
-  - sudo apt-get -qq install gcc-4.9
-  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90
-  - git clone https://github.com/PJK/libcbor.git
-  - cd libcbor
-  - git submodule update --init test/cmocka
-  - cd test
-  - mkdir cmocka_build && cd cmocka_build
+  - pushd $HOME
+  - git clone git://git.cryptomilk.org/projects/cmocka.git
+  - mkdir cmocka_build
+  - pushd cmocka_build
   - cmake ../cmocka
   - make -j 4
   - sudo make install
-  - cd ../..
+  - popd
+  - rm -rf cmocka cmocka_build
+  - git clone https://github.com/PJK/libcbor
+  - pushd libcbor
   - cmake .
+  - make VERBOSE=1
   - sudo make install
-  - cd ..
+  - popd
+  - popd
