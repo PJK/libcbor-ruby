@@ -27,7 +27,7 @@ module CBOR
 	# Custom semantics are supported - the object has to to provide the +to_cbor+ method
 	# In case {CBOR.method_name} is not +to_cbor+, provide the custom method instead.
 	#
-	# @param [Fixnum, String, Float, Array, Map, Tag, TrueClass, FalseClass, NilClass, #to_cbor] object the object to encode
+	# @param [Integer, String, Float, Array, Map, Tag, TrueClass, FalseClass, NilClass, #to_cbor] object the object to encode
 	# @return [String] the CBOR representation
 	def self.encode(object)
 		object.to_cbor
@@ -46,7 +46,7 @@ module CBOR
 	# @return [Array] list of the patched classes
 	def self.load!(name = nil)
 		@@method_name = name || :to_cbor
-		%w{Fixnum Float Array Hash String TrueClass FalseClass NilClass Tag ByteString}.each do |klass|
+		%w{Integer Float Array Hash String TrueClass FalseClass NilClass Tag ByteString}.each do |klass|
 			kklass = const_get(klass)
 			kklass.send(:include, const_get('::CBOR::' + klass + 'Helper'))
 			kklass.send(:alias_method, method_name, :__libcbor_to_cbor)
@@ -56,7 +56,7 @@ module CBOR
 	# Deserialize CBOR
 	#
 	# @param [String] data
-	# @return [Fixnum, String, Float, Array, Map, Tag, TrueClass, FalseClass, NilClass] resulting object
+	# @return [Integer, String, Float, Array, Map, Tag, TrueClass, FalseClass, NilClass] resulting object
 	# @raise [DecodingError] when presented with invalid data
 	def self.decode(data)
 		res = FFI::MemoryPointer.new LibCBOR::CborLoadResult

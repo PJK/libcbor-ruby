@@ -55,7 +55,7 @@ module CBOR
 			# You are responsible for correctly supplying the item that
 			# follows (i.e. the one the tag will apply to)
 			#
-			# @param [Fixnum] value Tag value.
+			# @param [Integer] value Tag value.
 			# @return [void]
 			def tag(value)
 				@@bfr ||= FFI::Buffer.new(:uchar, 9)

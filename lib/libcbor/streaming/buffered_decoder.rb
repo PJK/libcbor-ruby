@@ -7,20 +7,20 @@ module CBOR
 		# an example
 		class BufferedDecoder
 			# @param [Hash] callbacks the callbacks to invoke during parsing.
-			# @option callbacks [Proc<Fixnum>] :integer Integers, both positive and negative
+			# @option callbacks [Proc<Integer>] :integer Integers, both positive and negative
 			# @option callbacks [Proc<String>] :string Definite string
 			# @option callbacks [Proc] :chunked_string_start Chunked string. Chunks follow
 			# @option callbacks [Proc<String>] :byte_string Definite byte string
 			# @option callbacks [Proc] :chunked_byte_string_start Chunked byte string. Chunks follow
 			# @option callbacks [Proc<Float>] :float Float
-			# @option callbacks [Proc<length: Fixnum>] :definite_array Definite array
+			# @option callbacks [Proc<length: Integer>] :definite_array Definite array
 			# @option callbacks [Proc] :array_start Indefinite array start
-			# @option callbacks [Proc<length: Fixnum>] :definite_map Definite map. Length pairs follow
+			# @option callbacks [Proc<length: Integer>] :definite_map Definite map. Length pairs follow
 			# @option callbacks [Proc] :map_start Indefinite map start
-			# @option callbacks [Proc<value: Fixnum>] :tag Tag. Tagged item follows
+			# @option callbacks [Proc<value: Integer>] :tag Tag. Tagged item follows
 			# @option callbacks [Proc<Bool>] :bool Boolean
 			# @option callbacks [Proc] :null Null
-			# @option callbacks [Proc<value: Fixnum>] :simple Simple value other than +true, false, nil+
+			# @option callbacks [Proc<value: Integer>] :simple Simple value other than +true, false, nil+
 			# @option callbacks [Proc] :break Indefinite item break
 			def initialize(callbacks = {})
 				@callbacks = {
