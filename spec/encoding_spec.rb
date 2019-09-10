@@ -14,8 +14,21 @@ module CBOR
 		describe String do
 			it 'returns correct bytes' do
 				expect("Hello".to_cbor.bytes).to eq [101] + "Hello".bytes
-
 			end
+
+                        it "returns corrects bytes when binary encoding" do
+				word = "Hello".b
+
+				expect(word.to_cbor.bytes).to eq [0b010_00000 + word.length] + word.bytes
+                        end
+                end
+
+                describe ByteString do
+                        it "returns corrects bytes" do
+				word = CBOR::ByteString.new("Hello")
+
+				expect(word.to_cbor.bytes).to eq [0b010_00000 + word.length] + word.bytes
+                        end
 		end
 
 		describe Float do
