@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/PJK/libcbor-ruby.svg?branch=master)](https://travis-ci.org/PJK/libcbor-ruby)
 [![Coverage Status](https://coveralls.io/repos/PJK/libcbor-ruby/badge.svg?branch=master)](https://coveralls.io/r/PJK/libcbor-ruby?branch=master)
 
+**libcbor-ruby is deprecated and not actively maintained**
+
 The Ruby bindings for [libcbor](https://github.com/PJK/libcbor). Provides [CBOR](http://cbor.io/)
 encoding and decoding features, including streaming.
 
